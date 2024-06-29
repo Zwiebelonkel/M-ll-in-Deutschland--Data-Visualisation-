@@ -1,0 +1,72 @@
+html {
+  background-color: #424242;
+}
+
+.map {
+  margin-left: 30%;
+}
+
+#DE-BW:hover {
+  fill: #8b8b8b;
+  transition: all .5s;
+}
+
+#DE-BW {
+  transition: all .5s;
+}
+
+#DE-HB:hover {
+  fill: #8b8b8b;
+  transition: all .5s;
+}
+
+#DE-HB {
+  transition: all .5s;
+}
+
+#DE-BY:hover {
+  fill: #8b8b8b;
+  transition: all .5s;
+}
+
+#DE-BY {
+  transition: all .5s;
+}
+
+.card {
+  text-align: center;
+  opacity: .9;
+  background-color: gray;
+  border: 1vh solid #272727;
+  border-radius: 2%;
+  width: 20%;
+  height: 75vh;
+  padding: 1%;
+  transition: all .3s;
+  position: absolute;
+  top: 10%;
+}
+
+h1 {
+  font-size: 5vh;
+}
+
+.card:hover {
+  margin-left: 2%;
+}
+
+svg {
+  fill: #616161;
+  stroke: #2d2d2d;
+  stroke-width: .25%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.zoomed {
+  transform-origin: center;
+  transform: scale(2);
+}
+/*# sourceMappingURL=index.2cdaf7bc.css.map */

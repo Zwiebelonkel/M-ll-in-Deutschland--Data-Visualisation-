@@ -1,0 +1,80 @@
+@font-face { font-family: "Oswald"; 
+             src: url("../src/fonts/Oswald-Regular.ttf") format("truetype"); 
+} 
+
+html{
+    background-color: #40A578;
+}
+
+
+
+.map{
+    margin-left: 30%;
+}
+
+#DE-BW:hover, #DE-HB:hover, #DE-BY:hover, #DE-BE:hover, #DE-BB:hover, #DE-HH:hover, #DE-HE:hover, #DE-MV:hover, #DE-NI:hover, #DE-NW:hover, #DE-RP:hover, #DE-SL:hover, #DE-SN:hover, #DE-ST:hover, #DE-SH:hover, #DE-TH:hover{
+    transition: 0.5s;
+    fill: #006769;
+}
+
+#DE-BW, #DE-HB, #DE-BY, #DE-BE, #DE-BB, #DE-HH, #DE-HE, #DE-MV, #DE-NI, #DE-NW, #DE-RP, #DE-SL, #DE-SN, #DE-ST, #DE-SH, #DE-TH{
+    transition: 0.5s;
+}
+
+
+.card{
+    display: inline-block;
+    position: absolute;
+    background-color: #9DDE8B;
+    height: 75vh;
+    top: 10%;
+    text-align: center;
+    padding: 1%;
+    border-radius: 2%;
+    transition: 0.3s;
+    opacity: 0.9;
+    border: 1vh solid;
+    border-color: #006769;
+    overflow: hidden;
+}
+
+h1{
+    font-family: "Oswald";
+    font-size: 5vh; /* Die Schriftgröße bleibt relativ */
+}
+
+.card:hover{
+    margin-left: 2%;
+}
+
+svg{
+    fill: #E6FF94;
+    stroke: black;
+    stroke-width: 0.25%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.zoomed {
+    transform: scale(2); /* Zum Beispiel: Hier wird die Karte auf das Doppelte vergrößert */
+    transform-origin: center; /* Der Mittelpunkt des Zooms */
+}
+
+#cardname {
+    position: relative; /* Sicherstellen, dass cardname innerhalb der card bleibt */
+    z-index: 1; /* Bei Bedarf die Z-Index-Werte anpassen */
+    padding: 5px; /* Optional: etwas Polsterung hinzufügen */
+}
+
+#tooltip {
+    position: absolute;
+    display: none;
+    background-color: #fff;
+    border: 1px solid #000;
+    border-radius: 1vh;
+    padding: 5px;
+    z-index: 10;
+    font-family: "Oswald";
+}
