@@ -1,10 +1,12 @@
 let card = false; // Initialisierung der `card`-Variablen
 let rows = []; // Globale Variable, um die Daten zu speichern
 let chart = null; // Variable, um das Chart-Objekt zu speichern
+let barChart = null; // Variable, um das BarChart-Objekt zu speichern
 
 document.addEventListener('DOMContentLoaded', function () {
     fetchData();
     setupTooltip();
+    setupSlider();
 });
 
 function moveOut() {
@@ -20,7 +22,6 @@ function moveIn(BL) {
     document.getElementById("cardname").innerHTML = BL;
     card = false;
     console.log("In")
-
 }
 
 function toggleCard(BL) {
@@ -77,23 +78,27 @@ async function fetchData() {
     });
     console.log(rows);
 
-    createHeatmap(rows);
-    createBarChart(rows);
+    createHeatmap(rows, 'InputVonEntsorgung');
+    createBarChart(rows, 'InputVonEntsorgung');
 }
 
-function createBarChart(data) {
+function createBarChart(data, dataType) {
     const ctx = document.getElementById('barChart').getContext('2d');
     const labels = data.map(d => d.name);
-    const inputValues = data.map(d => d.InputVonEntsorgung);
+    const inputValues = data.map(d => d[dataType]);
 
-    new Chart(ctx, {
+    if (barChart) {
+        barChart.destroy();
+    }
+
+    barChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: labels,
             datasets: [{
-                label: 'Input von Abfallentsorgungsanlagen (1000 t)',
+                label: `Abfallentsorgung (${dataType}) (1000 t)`,
                 data: inputValues,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                backgroundColor: 'rgba(64, 165, 120, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1
             }]
@@ -108,7 +113,6 @@ function createBarChart(data) {
         }
     });
 }
-
 
 function setupTooltip() {
     const tooltip = document.getElementById('tooltip');
@@ -125,9 +129,9 @@ function setupTooltip() {
     });
 }
 
-function createHeatmap(data) {
-    const maxValue = Math.max(...data.map(d => d.InputVonEntsorgung));
-    const minValue = Math.min(...data.map(d => d.InputVonEntsorgung));
+function createHeatmap(data, dataType) {
+    const maxValue = Math.max(...data.map(d => d[dataType]));
+    const minValue = Math.min(...data.map(d => d[dataType]));
     function interpolateColor(value) {
         const startColor = [200, 222, 139];
         const endColor = [61, 139, 39];
@@ -164,10 +168,10 @@ function createHeatmap(data) {
         if (elementId) {
             const element = document.getElementById(elementId);
             if (element) {
-                const color = interpolateColor(d.InputVonEntsorgung);
+                const color = interpolateColor(d[dataType]);
                 element.style.fill = color;
                 element.setAttribute('data-name', d.name);
-                element.setAttribute('data-value', d.InputVonEntsorgung);
+                element.setAttribute('data-value', d[dataType]);
             } else {
                 console.error(`Element mit ID ${elementId} nicht gefunden.`);
             }
@@ -239,4 +243,22 @@ function pieChart(data, Bundesland) {
     } else {
         console.error(`Daten für das Bundesland ${Bundesland} nicht gefunden.`);
     }
+}
+
+function setupSlider() {
+    const slider = document.getElementById('dataTypeSlider');
+    const label = document.getElementById('dataTypeLabel');
+
+    slider.addEventListener('input', function () {
+        const dataTypes = ['InputVonEntsorgung', 'Ausland', 'Inland', 'ImEigenenBetrieb'];
+        const labels = ['Insgesamt', 'Ausland', 'Inland', 'Im eigenen Betrieb'];
+
+        const selectedType = dataTypes[this.value];
+        const selectedLabel = labels[this.value];
+
+        label.textContent = selectedLabel;
+
+        createHeatmap(rows, selectedType);
+        createBarChart(rows, selectedType);
+    });
 }
