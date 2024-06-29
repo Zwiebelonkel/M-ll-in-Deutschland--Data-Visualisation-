@@ -18,10 +18,11 @@ html {
 #DE-BW:hover, #DE-HB:hover, #DE-BY:hover, #DE-BE:hover, #DE-BB:hover, #DE-HH:hover, #DE-HE:hover, #DE-MV:hover, #DE-NI:hover, #DE-NW:hover, #DE-RP:hover, #DE-SL:hover, #DE-SN:hover, #DE-ST:hover, #DE-SH:hover, #DE-TH:hover {
     transition: 0.5s;
     fill: #006769;
+    stroke-width: 0.4%;
 }
 
 #DE-BW, #DE-HB, #DE-BY, #DE-BE, #DE-BB, #DE-HH, #DE-HE, #DE-MV, #DE-NI, #DE-NW, #DE-RP, #DE-SL, #DE-SN, #DE-ST, #DE-SH, #DE-TH {
-    transition: 0.5s;
+    transition: 0.8s;
 }
 
 .card {
@@ -39,6 +40,8 @@ html {
     border-color: #006769;
     overflow: hidden;
     z-index: 3; /* Sicherstellen, dass die Karte vor der Karte und dem Balkendiagramm liegt */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
 }
 
 h1 {
@@ -89,7 +92,7 @@ svg {
     margin: 50px auto;
     left: 50%;
     transform: translateX(-50%);
-    height: fit-content;
+    height: 50vh;
     top: 90vh;
     background-color: #ffffff;
     align-items: center;
@@ -120,6 +123,8 @@ svg {
     opacity: 0.95;
     border: 1vh solid;
     border-color: #006769;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
 
 
 }
