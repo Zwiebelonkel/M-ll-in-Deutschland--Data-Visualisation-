@@ -8,9 +8,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function moveOut() {
+    card = true;
     let cardElement = document.getElementById("card");
     cardElement.style.transform = "translateX(-100%)";
-    card = true;
+    console.log("Out")
 }
 
 function moveIn(BL) {
@@ -18,44 +19,48 @@ function moveIn(BL) {
     cardElement.style.transform = "translateX(0)";
     document.getElementById("cardname").innerHTML = BL;
     card = false;
+    console.log("In")
+
 }
 
 function toggleCard(BL) {
-    if (card == false) {
-        moveOut();
-        if (document.getElementById("cardname").innerHTML != BL) {
-            moveOut();
-        }
-    } else {
+    if (!card) {
         moveIn(BL);
+    } else {
+        if (document.getElementById("cardname").innerHTML === BL) {
+            moveOut();
+        } else {
+            moveOut();
+            setTimeout(() => moveIn(BL), 500); // 500ms Timeout to match the transition duration
+        }
     }
     // Erstelle das Pie-Chart für das ausgewählte Bundesland
     pieChart(rows, BL);
 }
 
-function Bw() { toggleCard("Baden-Württemberg"); }
-function Hb() { toggleCard("Bremen"); }
-function By() { toggleCard("Bayern"); }
-function Be() { toggleCard("Berlin"); }
-function Bb() { toggleCard("Brandenburg"); }
-function Hh() { toggleCard("Hamburg"); }
-function He() { toggleCard("Hessen"); }
-function Mv() { toggleCard("Mecklenburg-Vorpommern"); }
-function Ni() { toggleCard("Niedersachsen"); }
-function Nw() { toggleCard("Nordrhein-Westfalen"); }
-function Rp() { toggleCard("Rheinland-Pfalz"); }
-function Sl() { toggleCard("Saarland"); }
-function Sn() { toggleCard("Sachsen"); }
-function St() { toggleCard("Sachsen-Anhalt"); }
-function Sh() { toggleCard("Schleswig-Holstein"); }
-function Th() { toggleCard("Thüringen"); }
+// function Bw() { toggleCard("Baden-Württemberg"); }
+// function Hb() { toggleCard("Bremen"); }
+// function By() { toggleCard("Bayern"); }
+// function Be() { toggleCard("Berlin"); }
+// function Bb() { toggleCard("Brandenburg"); }
+// function Hh() { toggleCard("Hamburg"); }
+// function He() { toggleCard("Hessen"); }
+// function Mv() { toggleCard("Mecklenburg-Vorpommern"); }
+// function Ni() { toggleCard("Niedersachsen"); }
+// function Nw() { toggleCard("Nordrhein-Westfalen"); }
+// function Rp() { toggleCard("Rheinland-Pfalz"); }
+// function Sl() { toggleCard("Saarland"); }
+// function Sn() { toggleCard("Sachsen"); }
+// function St() { toggleCard("Sachsen-Anhalt"); }
+// function Sh() { toggleCard("Schleswig-Holstein"); }
+// function Th() { toggleCard("Thüringen"); }
 
 async function fetchData() {
     const response = await fetch("Entsorgung von Abfällen - Bundesländer.csv");
     const data = await response.text();
 
     // Split the data by new lines, remove the header and the last empty line
-    rows = data.split("\n").slice(4, -1).map(elt => {
+    rows = data.split("\n").slice(5, -1).map(elt => {
         const row = elt.split(",").map(col => col.replace(/"/g, '').trim());
 
         // Combine thousand-separated numbers
@@ -73,7 +78,37 @@ async function fetchData() {
     console.log(rows);
 
     createHeatmap(rows);
+    createBarChart(rows);
 }
+
+function createBarChart(data) {
+    const ctx = document.getElementById('barChart').getContext('2d');
+    const labels = data.map(d => d.name);
+    const inputValues = data.map(d => d.InputVonEntsorgung);
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Input von Abfallentsorgungsanlagen (1000 t)',
+                data: inputValues,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
 
 function setupTooltip() {
     const tooltip = document.getElementById('tooltip');
@@ -82,7 +117,7 @@ function setupTooltip() {
             tooltip.style.display = 'block';
             tooltip.style.left = event.pageX + 10 + 'px';
             tooltip.style.top = event.pageY + 10 + 'px';
-            tooltip.innerHTML = element.getAttribute('data-name') + '<br>' + 'Value: ' + element.getAttribute('data-value');
+            tooltip.innerHTML = element.getAttribute('data-name') + '<br>' + 'Insgesamt: ' + element.getAttribute('data-value') + " /1000 t";
         });
         element.addEventListener('mouseout', () => {
             tooltip.style.display = 'none';
@@ -96,8 +131,8 @@ function createHeatmap(data) {
     function interpolateColor(value) {
         const startColor = [200, 222, 139];
         const endColor = [61, 139, 39];
-        const differenz = maxValue - minValue
-        const factor = value / differenz;
+        const differenz = maxValue - minValue;
+        const factor = (value - minValue) / differenz;
         const interpolate = (start, end, factor) => Math.round(start + (end - start) * factor);
         const r = interpolate(startColor[0], endColor[0], factor);
         const g = interpolate(startColor[1], endColor[1], factor);
@@ -140,6 +175,15 @@ function createHeatmap(data) {
             console.error(`Keine passende ID für das Bundesland ${d.name} gefunden.`);
         }
     });
+
+    // Event-Listener für Klickereignisse auf jedes Bundesland
+    document.querySelectorAll('.map path').forEach(element => {
+        element.addEventListener('click', () => {
+            console.log(card)
+            const Bundesland = element.getAttribute('data-name');
+            toggleCard(Bundesland); // Aufruf der toggleCard-Funktion mit dem ausgewählten Bundesland
+        });
+    });
 }
 
 // Funktion zum Erstellen des Pie-Charts für ein bestimmtes Bundesland
@@ -171,7 +215,7 @@ function pieChart(data, Bundesland) {
                         selectedData.Inland,
                         selectedData.ImEigenenBetrieb,
                     ],
-                    backgroundColor: ['aqua', 'yellow', 'pink', 'lightgreen'],
+                    backgroundColor: ['aqua', 'yellow', 'pink'],
                     hoverOffset: 5
                 }],
             },
@@ -180,7 +224,7 @@ function pieChart(data, Bundesland) {
                 plugins: {
                     tooltip: {
                         callbacks: {
-                            label: function(tooltipItem) {
+                            label: function (tooltipItem) {
                                 let value = tooltipItem.raw;
                                 if (value === 0) {
                                     return 'Keine Daten';
@@ -196,11 +240,3 @@ function pieChart(data, Bundesland) {
         console.error(`Daten für das Bundesland ${Bundesland} nicht gefunden.`);
     }
 }
-
-// Event-Listener für Klickereignisse auf jedes Bundesland
-document.querySelectorAll('.map path').forEach(element => {
-    element.addEventListener('click', () => {
-        const Bundesland = element.getAttribute('data-name');
-        toggleCard(Bundesland); // Aufruf der toggleCard-Funktion mit dem ausgewählten Bundesland
-    });
-});
