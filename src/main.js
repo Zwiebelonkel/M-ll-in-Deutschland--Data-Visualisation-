@@ -13,7 +13,7 @@ function moveOut() {
     card = true;
     let cardElement = document.getElementById("card");
     cardElement.style.transform = "translateX(-100%)";
-    console.log("Out")
+    console.log("Out");
 }
 
 function moveIn(BL) {
@@ -21,7 +21,7 @@ function moveIn(BL) {
     cardElement.style.transform = "translateX(0)";
     document.getElementById("cardname").innerHTML = BL;
     card = false;
-    console.log("In")
+    console.log("In");
 }
 
 function toggleCard(BL) {
@@ -38,23 +38,6 @@ function toggleCard(BL) {
     // Erstelle das Pie-Chart für das ausgewählte Bundesland
     pieChart(rows, BL);
 }
-
-// function Bw() { toggleCard("Baden-Württemberg"); }
-// function Hb() { toggleCard("Bremen"); }
-// function By() { toggleCard("Bayern"); }
-// function Be() { toggleCard("Berlin"); }
-// function Bb() { toggleCard("Brandenburg"); }
-// function Hh() { toggleCard("Hamburg"); }
-// function He() { toggleCard("Hessen"); }
-// function Mv() { toggleCard("Mecklenburg-Vorpommern"); }
-// function Ni() { toggleCard("Niedersachsen"); }
-// function Nw() { toggleCard("Nordrhein-Westfalen"); }
-// function Rp() { toggleCard("Rheinland-Pfalz"); }
-// function Sl() { toggleCard("Saarland"); }
-// function Sn() { toggleCard("Sachsen"); }
-// function St() { toggleCard("Sachsen-Anhalt"); }
-// function Sh() { toggleCard("Schleswig-Holstein"); }
-// function Th() { toggleCard("Thüringen"); }
 
 async function fetchData() {
     const response = await fetch("Entsorgung von Abfällen - Bundesländer.csv");
@@ -73,31 +56,48 @@ async function fetchData() {
             InputVonEntsorgung: combineNumber(row, 2),
             ImEigenenBetrieb: combineNumber(row, 4),
             Inland: combineNumber(row, 6),
-            Ausland: combineNumber(row, 8)
+            Ausland: combineNumber(row, 8),
+            Bevoelkerungsdichte: parseFloat(row[10].replace(",", "."))
         };
     });
+
+    // Debugging-Ausgabe, um sicherzustellen, dass die Daten korrekt geladen sind
     console.log(rows);
 
+    // Hier sollte die Funktionsaufrufe für createHeatmap und createBarChart erfolgen
     createHeatmap(rows, 'InputVonEntsorgung');
     createBarChart(rows, 'InputVonEntsorgung');
 }
 
 function createBarChart(data, dataType) {
     const ctx = document.getElementById('barChart').getContext('2d');
-    const labels = data.map(d => d.name);
-    const inputValues = data.map(d => d[dataType]);
 
+    // Sortiere die Daten absteigend basierend auf dem angegebenen dataType
+    data.sort((a, b) => b[dataType] - a[dataType]);
+
+    // Extrahiere sortierte Werte für den Chart
+    const sortedValues = data.map(d => d[dataType]);
+
+    // Extrahiere sortierte Labels für den Chart
+    const labels = data.map(d => d.name);
+
+    // Debugging-Ausgabe, um sicherzustellen, dass Labels und Daten korrekt sind
+    console.log("Sorted Labels:", labels);
+    console.log("Sorted Values:", sortedValues);
+
+    // Zerstöre das alte Chart-Objekt, falls es existiert
     if (barChart) {
         barChart.destroy();
     }
 
+    // Erstelle den neuen Chart
     barChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: labels,
             datasets: [{
-                label: `Abfallentsorgung (${dataType}) (1000 t)`,
-                data: inputValues,
+                label: `Abfallentsorgung (${dataType})`,
+                data: sortedValues,
                 backgroundColor: 'rgba(64, 165, 120, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1
@@ -250,8 +250,8 @@ function setupSlider() {
     const label = document.getElementById('dataTypeLabel');
 
     slider.addEventListener('input', function () {
-        const dataTypes = ['InputVonEntsorgung', 'Ausland', 'Inland', 'ImEigenenBetrieb'];
-        const labels = ['Insgesamt', 'Ausland', 'Inland', 'Im eigenen Betrieb'];
+        const dataTypes = ['InputVonEntsorgung', 'Ausland', 'Inland', 'ImEigenenBetrieb', 'Bevoelkerungsdichte'];
+        const labels = ['Input', 'Ausland', 'Inland', 'Im eigenen Betrieb', 'Bevölkerungsdichte'];
 
         const selectedType = dataTypes[this.value];
         const selectedLabel = labels[this.value];
