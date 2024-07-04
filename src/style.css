@@ -178,3 +178,10 @@ svg {
     display: inline-block;
     margin-left: 10px;
 }
+
+#information{
+    font-family: "Oswald";
+    text-align: left;
+}
+
+

@@ -20,22 +20,36 @@ function moveIn(BL) {
     let cardElement = document.getElementById("card");
     cardElement.style.transform = "translateX(0)";
     document.getElementById("cardname").innerHTML = BL;
+
+    // Suchen Sie das ausgewählte Bundesland
+    const selectedData = rows.find(d => d.name === BL);
+    if (selectedData) {
+        document.getElementById("flaeche").innerText = selectedData.Flaeche + " km²";
+        document.getElementById("entsorgungsanlagen").innerText = selectedData.Abfallentsorgungsanlagen;
+        document.getElementById("bevoelkerungsdichte").innerText = selectedData.Bevoelkerungsdichte;
+    }
+
     card = false;
     console.log("In");
 }
 
+
 function toggleCard(BL) {
     if (!card) {
         moveIn(BL);
+        card = true; // Setze den Kartenstatus auf "eingefahren"
     } else {
         if (document.getElementById("cardname").innerHTML === BL) {
             moveOut();
+            card = false; // Setze den Kartenstatus auf "ausgefahren"
         } else {
             moveOut();
-            setTimeout(() => moveIn(BL), 500); // 500ms Timeout to match the transition duration
+            setTimeout(() => {
+                moveIn(BL);
+                card = true; // Setze den Kartenstatus auf "eingefahren" nach einer Verzögerung
+            }, 200); // 500ms Timeout, um die Übergangszeit abzustimmen
         }
     }
-    // Erstelle das Pie-Chart für das ausgewählte Bundesland
     pieChart(rows, BL);
 }
 
@@ -57,7 +71,8 @@ async function fetchData() {
             ImEigenenBetrieb: combineNumber(row, 4),
             Inland: combineNumber(row, 6),
             Ausland: combineNumber(row, 8),
-            Bevoelkerungsdichte: parseFloat(row[10].replace(",", "."))
+            Bevoelkerungsdichte: parseFloat(row[10].replace(",", ".")),
+            Flaeche: parseFloat(row[11].replace(",", "."))
         };
     });
 
@@ -192,6 +207,7 @@ function createHeatmap(data, dataType) {
 
 // Funktion zum Erstellen des Pie-Charts für ein bestimmtes Bundesland
 function pieChart(data, Bundesland) {
+    console.log("Piechart");
     // Finde die Daten für das ausgewählte Bundesland
     const selectedData = data.find(d => d.name === Bundesland);
 
@@ -250,8 +266,8 @@ function setupSlider() {
     const label = document.getElementById('dataTypeLabel');
 
     slider.addEventListener('input', function () {
-        const dataTypes = ['InputVonEntsorgung', 'Ausland', 'Inland', 'ImEigenenBetrieb', 'Bevoelkerungsdichte'];
-        const labels = ['Input', 'Ausland', 'Inland', 'Im eigenen Betrieb', 'Bevölkerungsdichte'];
+        const dataTypes = ['InputVonEntsorgung', 'Ausland', 'Inland', 'ImEigenenBetrieb', 'Bevoelkerungsdichte', 'Abfallentsorgungsanlagen'];
+        const labels = ['Input', 'Ausland', 'Inland', 'Im eigenen Betrieb', 'Bevölkerungsdichte', 'Abfallentsorgungsanlagen'];
 
         const selectedType = dataTypes[this.value];
         const selectedLabel = labels[this.value];
@@ -262,3 +278,5 @@ function setupSlider() {
         createBarChart(rows, selectedType);
     });
 }
+
+
