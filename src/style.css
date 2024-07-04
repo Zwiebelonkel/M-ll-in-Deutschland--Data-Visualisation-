@@ -3,6 +3,22 @@
     src: url("../src/fonts/Oswald-Regular.ttf") format("truetype"); 
 } 
 
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; /* Anfangszustand des Overlays (unsichtbar) */
+    height: 100%;
+    background-color: rgb(0, 0, 0); /* Schwarzes Overlay mit Transparenz */
+    z-index: 1000; /* Z-Index über allem anderen Inhalt */
+    transition: width 1s ease; /* Animationseffekt für die Breitenänderung */
+}
+
+/* Klasse zum Anzeigen des Overlays */
+.overlay-visible {
+    width: 0%; /* Overlay wird sichtbar, wenn es 100% der Breite des Bildschirms hat */
+}
+
 html {
     background-color: #40A578;
     overflow: hidden;
@@ -183,5 +199,7 @@ svg {
     font-family: "Oswald";
     text-align: left;
 }
+
+
 
 

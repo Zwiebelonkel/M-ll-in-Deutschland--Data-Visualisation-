@@ -3,10 +3,14 @@ let rows = []; // Globale Variable, um die Daten zu speichern
 let chart = null; // Variable, um das Chart-Objekt zu speichern
 let barChart = null; // Variable, um das BarChart-Objekt zu speichern
 
+
 document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('overlay').classList.add('overlay-visible');
     fetchData();
     setupTooltip();
     setupSlider();
+    let cardElement = document.getElementById("card");
+    cardElement.style.transform = "translateX(-100%)";
 });
 
 function moveOut() {
