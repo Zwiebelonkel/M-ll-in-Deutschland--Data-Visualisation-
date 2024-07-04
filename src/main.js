@@ -5,7 +5,9 @@ let barChart = null; // Variable, um das BarChart-Objekt zu speichern
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('overlay').classList.add('overlay-visible');
+    setTimeout(() => {
+        document.getElementById('overlay').classList.add('overlay-visible');
+    }, 200);
     fetchData();
     setupTooltip();
     setupSlider();
