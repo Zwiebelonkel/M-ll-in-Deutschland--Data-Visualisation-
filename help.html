@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deutschland Müllkarte</title>
+    <style>
+        @font-face {
+            font-family: "Oswald";
+            src: url("Oswald-Regular.ttf") format("truetype");
+        }
+
+        body {
+            font-family: "Oswald";
+            background-color: #40A578;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: left;
+        }
+
+        h1 {
+            color: #333333;
+            animation-name: "title";
+            animation-duration: 5s;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes title {
+            0% {
+                font-size: 300%;
+            }
+
+            50% {
+                font-size: 310%;
+            }
+
+            100% {
+                font-size: 300%;
+            }
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border-radius: 0.5vh;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Overlay-Stil */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            /* Anfangszustand des Overlays (unsichtbar) */
+            height: 100%;
+            background-color: rgb(0, 0, 0);
+            /* Schwarzes Overlay mit Transparenz */
+            z-index: 1000;
+            /* Z-Index über allem anderen Inhalt */
+            transition: width 1s ease;
+            /* Animationseffekt für die Breitenänderung */
+        }
+
+        /* Klasse zum Anzeigen des Overlays */
+        .overlay-visible {
+            width: 100%;
+            /* Overlay wird sichtbar, wenn es 100% der Breite des Bildschirms hat */
+        }
+
+        .help {
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="overlay" id="overlay"></div>
+    <div class="container">
+        <h1>Hilfe</h1>
+        <div id="help">
+            <p>Hovern Sie über ein Bundesland um den dazugehörigen Gesamtwert anzeigen zu lassen.</p>
+            <p>
+                Die Gesamtwerte basieren auf der gesamten Bevölkerung und sind nicht absolut, sondern relativ zu den
+                jeweiligen Bundesländern.
+            </p>
+            <p> Die Gesamtwerte sind in Tonnen angegeben. Die Karte zeigt die
+                Bevölkerungsdichte und die Anteile der verschiedenen Müllarten in den verschiedenen Bundesländern.
+            </p>
+            <p>
+                Die Karte kann durch den Slider oben verändert werden, um die Anzeige des Kriteriums für die
+                Bundesländer
+                zu ändern.
+            </p>
+            <p>
+                Der Bar-Chart unten, passt sich immer an den Wert im Slider an und ist immer absteigend sortiert.
+            </p>
+        </div>
+
+        <button onclick="startApplication()">Alles Klar!</button>
+    </div>
+
+    <script>
+        function startApplication() {
+            // Füge der Overlay-Div die Klasse hinzu, um sie sichtbar zu machen
+            document.getElementById('overlay').classList.add('overlay-visible');
+
+            // Warte für eine kurze Zeit, bevor die Weiterleitung stattfindet
+            setTimeout(function () {
+                window.location.href = 'map.html'; // Hier deine eigentliche Seite, zu der du weiterleiten möchtest
+            }, 1000); // 1000 Millisekunden (1 Sekunde) Verzögerung, bevor die Seite gewechselt wird
+        }
+    </script>
+</body>
+
+</html>

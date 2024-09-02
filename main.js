@@ -285,4 +285,8 @@ function setupSlider() {
     });
 }
 
+function startApplication() {
+    window.location.href = 'help.html';
+}
+
 
