@@ -75,7 +75,7 @@ html {
   display: inline-block;
   position: absolute;
   background-color: #9dde8b;
-  height: 75vh;
+  height: fit-content;
   top: 10%;
   text-align: center;
   padding: 1%;
@@ -93,6 +93,16 @@ html {
 h1 {
   font-family: "Oswald";
   font-size: 5vh; /* Die Schriftgröße bleibt relativ */
+}
+
+h2 {
+  font-family: "Oswald";
+  font-size: 3vh; /* Die Schriftgröße bleibt relativ */
+}
+
+h3 {
+  font-family: "Oswald";
+  font-size: 2vh; /* Die Schriftgröße bleibt relativ */
 }
 
 .card:hover {
@@ -135,6 +145,7 @@ svg {
 }
 
 #barChartContainer {
+  position: relative;
   width: 75vh; /* Da der Container gedreht wird, sollte die Breite der Höhe angepasst werden */
   height: 40vh; /* Höhe wird zur Breite */
   padding-top: 1vh;
@@ -184,6 +195,10 @@ svg {
   font-size: 1.5vh;
   top: -3.4vh;
   transition: 0.3s;
+}
+
+#slidertext {
+  font-size: 1.5vh;
 }
 
 #sliderContainer:hover {
