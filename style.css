@@ -259,3 +259,30 @@ button:hover {
   z-index: -100000;
   transition: 0.5s;
 }
+
+#legend {
+  margin-top: -24%;
+  width: 15%;
+  height: 1%;
+  border: 0.5vh solid;
+  border-color: #000000;
+  background: linear-gradient(
+    90deg,
+    rgba(200, 222, 139, 1) 0%,
+    rgba(61, 139, 39, 1) 100%
+  );
+  padding: 2vh;
+  border-radius: 1vh;
+}
+
+#low {
+  font-family: "Oswald";
+  margin-top: -5%;
+  font-size: 2vh;
+}
+#high {
+  font-family: "Oswald";
+  margin-top: -10%;
+  margin-left: 90%;
+  font-size: 2vh;
+}
