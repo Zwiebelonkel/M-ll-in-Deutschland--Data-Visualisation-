@@ -42,21 +42,15 @@ function moveIn(BL) {
 
 
 function toggleCard(BL) {
-    if (!card) {
+    // Wenn die Karte nicht sichtbar ist, oder ein anderes Bundesland angeklickt wurde, zeige sie an
+    if (!card || document.getElementById("cardname").innerHTML !== BL) {
         moveIn(BL);
         card = true; // Setze den Kartenstatus auf "eingefahren"
     } else {
-        if (document.getElementById("cardname").innerHTML === BL) {
-            moveOut();
-            card = false; // Setze den Kartenstatus auf "ausgefahren"
-        } else {
-            moveOut();
-            setTimeout(() => {
-                moveIn(BL);
-                card = true; // Setze den Kartenstatus auf "eingefahren" nach einer Verzögerung
-            }, 200); // 500ms Timeout, um die Übergangszeit abzustimmen
-        }
+        // Wenn das gleiche Bundesland angeklickt wurde, soll nichts passieren
+        console.log("Bereits ausgewähltes Bundesland");
     }
+    // Aktualisiere das Diagramm, unabhängig davon, ob es ein neues Bundesland ist oder nicht
     pieChart(rows, BL);
 }
 
