@@ -2,6 +2,7 @@ let card = false; // Initialisierung der `card`-Variablen
 let rows = []; // Globale Variable, um die Daten zu speichern
 let chart = null; // Variable, um das Chart-Objekt zu speichern
 let barChart = null; // Variable, um das BarChart-Objekt zu speichern
+let mull = 0
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -126,6 +127,7 @@ function createBarChart(data, dataType) {
         },
         options: {
             responsive: true,
+            indexAxis: "y",
             scales: {
                 y: {
                     beginAtZero: true
@@ -284,6 +286,18 @@ function setupSlider() {
         createBarChart(rows, selectedType);
     });
 }
+
+// function drop() {
+//     mull = mull + 5; // Increment the height value in vh
+//     document.getElementById("mull").style.height = mull + "vh";
+
+//     // Convert mull vh to pixels
+//     let mullHeightInPixels = (mull / 100) * window.innerHeight;
+
+//     if (mullHeightInPixels >= window.innerHeight) {
+//         console.log("ende");
+//     }
+// }
 
 function startApplication() {
     window.location.href = 'help.html';
