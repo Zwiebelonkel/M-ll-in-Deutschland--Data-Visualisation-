@@ -1,7 +1,7 @@
-let card = false; // Initialisierung der `card`-Variablen
-let rows = []; // Globale Variable, um die Daten zu speichern
-let chart = null; // Variable, um das Chart-Objekt zu speichern
-let barChart = null; // Variable, um das BarChart-Objekt zu speichern
+let card = false;
+let rows = [];
+let chart = null;
+let barChart = null;
 let mull = 0
 
 
@@ -42,15 +42,12 @@ function moveIn(BL) {
 
 
 function toggleCard(BL) {
-    // Wenn die Karte nicht sichtbar ist, oder ein anderes Bundesland angeklickt wurde, zeige sie an
     if (!card || document.getElementById("cardname").innerHTML !== BL) {
         moveIn(BL);
-        card = true; // Setze den Kartenstatus auf "eingefahren"
+        card = true; 
     } else {
-        // Wenn das gleiche Bundesland angeklickt wurde, soll nichts passieren
         console.log("Bereits ausgewähltes Bundesland");
     }
-    // Aktualisiere das Diagramm, unabhängig davon, ob es ein neues Bundesland ist oder nicht
     pieChart(rows, BL);
 }
 
@@ -58,11 +55,9 @@ async function fetchData() {
     const response = await fetch("Entsorgung von Abfällen - Bundesländer.csv");
     const data = await response.text();
 
-    // Split the data by new lines, remove the header and the last empty line
     rows = data.split("\n").slice(5, -1).map(elt => {
         const row = elt.split(",").map(col => col.replace(/"/g, '').trim());
 
-        // Combine thousand-separated numbers
         const combineNumber = (arr, idx) => parseFloat(arr[idx] + '.' + arr[idx + 1]);
 
         return {
@@ -77,10 +72,8 @@ async function fetchData() {
         };
     });
 
-    // Debugging-Ausgabe, um sicherzustellen, dass die Daten korrekt geladen sind
     console.log(rows);
 
-    // Hier sollte die Funktionsaufrufe für createHeatmap und createBarChart erfolgen
     createHeatmap(rows, 'InputVonEntsorgung');
     createBarChart(rows, 'InputVonEntsorgung');
 }
@@ -88,25 +81,19 @@ async function fetchData() {
 function createBarChart(data, dataType) {
     const ctx = document.getElementById('barChart').getContext('2d');
 
-    // Sortiere die Daten absteigend basierend auf dem angegebenen dataType
     data.sort((a, b) => b[dataType] - a[dataType]);
 
-    // Extrahiere sortierte Werte für den Chart
     const sortedValues = data.map(d => d[dataType]);
 
-    // Extrahiere sortierte Labels für den Chart
     const labels = data.map(d => d.name);
 
-    // Debugging-Ausgabe, um sicherzustellen, dass Labels und Daten korrekt sind
     console.log("Sorted Labels:", labels);
     console.log("Sorted Values:", sortedValues);
 
-    // Zerstöre das alte Chart-Objekt, falls es existiert
     if (barChart) {
         barChart.destroy();
     }
 
-    // Erstelle den neuen Chart
     barChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -197,35 +184,28 @@ function createHeatmap(data, dataType) {
         }
     });
 
-    // Event-Listener für Klickereignisse auf jedes Bundesland
     document.querySelectorAll('.map path').forEach(element => {
         element.addEventListener('click', () => {
             console.log(card)
             const Bundesland = element.getAttribute('data-name');
-            toggleCard(Bundesland); // Aufruf der toggleCard-Funktion mit dem ausgewählten Bundesland
+            toggleCard(Bundesland); 
         });
     });
 }
 
-// Funktion zum Erstellen des Pie-Charts für ein bestimmtes Bundesland
 function pieChart(data, Bundesland) {
     console.log("Piechart");
-    // Finde die Daten für das ausgewählte Bundesland
     const selectedData = data.find(d => d.name === Bundesland);
 
-    // Überprüfen, ob Daten für das ausgewählte Bundesland gefunden wurden
     if (selectedData) {
-        console.log(selectedData); // Überprüfen der Daten im Konsolen-Log
+        console.log(selectedData);
 
-        // Holen Sie sich das Canvas-Element und den Kontext
         var chrt = document.getElementById("chartId").getContext("2d");
 
-        // Wenn bereits ein Chart existiert, zerstöre es
         if (chart) {
             chart.destroy();
         }
 
-        // Erstellen Sie den Pie-Chart
         chart = new Chart(chrt, {
             type: 'pie',
             data: {
